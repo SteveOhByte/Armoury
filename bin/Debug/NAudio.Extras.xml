@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAudio.Extras</name>
+    </assembly>
+    <members>
+        <member name="T:NAudio.Extras.AudioPlaybackEngine">
+            <summary>
+            Demo for fire and forget playback
+            </summary>
+        </member>
+        <member name="T:NAudio.Extras.AutoDisposeFileReader">
+            <summary>
+            Used by AudioPlaybackEngine
+            </summary>
+        </member>
+        <member name="T:NAudio.Extras.CachedSound">
+            <summary>
+            Used by AudioPlaybackEngine
+            </summary>
+        </member>
+        <member name="T:NAudio.Extras.Equalizer">
+            <summary>
+            Basic example of a multi-band eq
+            uses the same settings for both channels in stereo audio
+            Call Update after you've updated the bands
+            Potentially to be added to NAudio in a future version
+            </summary>
+        </member>
+        <member name="T:NAudio.Extras.LoopStream">
+            <summary>
+            Loopable WaveStream
+            </summary>
+        </member>
+        <member name="M:NAudio.Extras.LoopStream.#ctor(NAudio.Wave.WaveStream)">
+            <summary>
+            Creates a new Loop stream
+            </summary>
+        </member>
+        <member name="P:NAudio.Extras.LoopStream.WaveFormat">
+            <summary>
+            The WaveFormat of this stream
+            </summary>
+        </member>
+        <member name="P:NAudio.Extras.LoopStream.Length">
+            <summary>
+            Length in bytes of this stream (effectively infinite)
+            </summary>
+        </member>
+        <member name="P:NAudio.Extras.LoopStream.Position">
+            <summary>
+            Position within this stream in bytes
+            </summary>
+        </member>
+        <member name="M:NAudio.Extras.LoopStream.HasData(System.Int32)">
+            <summary>
+            Always has data available
+            </summary>
+        </member>
+        <member name="M:NAudio.Extras.LoopStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read data from this stream
+            </summary>
+        </member>
+        <member name="M:NAudio.Extras.LoopStream.Dispose(System.Boolean)">
+            <summary>
+            Dispose this WaveStream (disposes the source)
+            </summary>
+        </member>
+        <member name="T:NAudio.Extras.SampleAggregator">
+            <summary>
+            Demo sample provider that performs FFTs
+            </summary>
+        </member>
+    </members>
+</doc>
