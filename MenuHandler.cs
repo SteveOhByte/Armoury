@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using LemonUI;
 using LemonUI.Menus;
 using Rage;
+using Rage.Native;
 
 namespace Armoury
 {
@@ -29,6 +30,8 @@ namespace Armoury
                 while (true)
                 {
                     GameFiber.Yield();
+                    
+                    NativeFunction.Natives.DISABLE_PLAYER_VEHICLE_REWARDS(Game.LocalPlayer);
 
                     if (IsMenuToggleRequested()) menuEnabled = !menuEnabled;
                     if (Game.IsKeyDown(Keys.Back)) menuEnabled = false;

@@ -13,6 +13,9 @@ namespace Armoury
         public Weapon shotgun = null;
 
         private const int MaxArmour = 100;
+        
+        private bool rifleEquipped = false;
+        private bool shotgunEquipped = false;
 
         public void Activate()
         {
@@ -63,10 +66,13 @@ namespace Armoury
                 
                 foreach (string component in weapon.components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
-                
-                if (armour) Game.LocalPlayer.Character.Armor = MaxArmour;
-                if (medkit) Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;
             }
+            
+            if (armour) Game.LocalPlayer.Character.Armor = MaxArmour;
+            if (medkit) Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;
+            
+            if (rifleEquipped) GetRifle();
+            if (shotgunEquipped) GetShotgun();
         }
 
         public void GetRifle()
@@ -90,6 +96,8 @@ namespace Armoury
                 
             foreach (string component in rifle.components)
                 Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+            
+            rifleEquipped = true;
         }
         
         public void StoreRifle()
@@ -110,6 +118,8 @@ namespace Armoury
             }
 
             Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
+            
+            rifleEquipped = false;
         }
         
         public void GetShotgun()
@@ -133,6 +143,8 @@ namespace Armoury
                 
             foreach (string component in shotgun.components)
                 Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+            
+            shotgunEquipped = true;
         }
         
         public void StoreShotgun()
@@ -153,6 +165,8 @@ namespace Armoury
             }
 
             Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
+            
+            shotgunEquipped = false;
         }
     }
 }

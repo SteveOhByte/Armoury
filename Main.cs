@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using LiteConfig;
@@ -74,14 +72,16 @@ namespace Armoury
                 Notification.DisplayNotification(TimeSpan.FromSeconds(15), Color.FromArgb(150, 0, 0, 0),
                     $"Armoury v {version}", "by SteveOhByte", "has been loaded");
 
-                if (checkForUpdates)
+                // TODO: Work with OhPluginEssentials to get this working well again
+                /*if (checkForUpdates)
                 {
                     Logger.Log("Checking for updates...");
                     UpdateChecker updateChecker = new UpdateChecker("https://www.dl.dropboxusercontent.com/scl/fi/neze4glu5vt38ifvl09ep/version.txt?rlkey=rvvoc2qhg3v46flcpxqnbcoc3&dl=0", version);
                     updateChecker.IsUpdateAvailable().ContinueWith(task =>
                     {
-                        Logger.Log("Update available: " + task.Result);
-                        if (!task.Result) return;
+                        (bool available, string ex) = task.Result;
+                        Logger.Log("Update available: " + available);
+                        if (!string.IsNullOrEmpty(ex)) Logger.Log("Update check failed: " + ex);
                         
                         if (autoUpdate)
                         {
@@ -89,11 +89,12 @@ namespace Armoury
                             Updater updater = new Updater("https://www.dl.dropboxusercontent.com/scl/fi/5yfgra636cwdx28nwrhcg/Update.zip?rlkey=stwh9jtz42yep9er965i8fow9&dl=0", "plugins/LSPDFR");
                             updater.WasUpdateSuccessful().ContinueWith(t =>
                             {
-                                Logger.Log(t.Result ? "Update successful" : "Update failed");
+                                (bool wasSuccessful, string exception) = t.Result;
+                                Logger.Log(wasSuccessful ? "Update successful" : "Update failed: " + exception);
                                 Notification.DisplayNotification(TimeSpan.FromSeconds(20),
                                     Color.FromArgb(150, 0, 0, 0),
                                     $"Armoury v {version}", "by SteveOhByte",
-                                    t.Result ? "has been updated" : "failed to update");
+                                    wasSuccessful ? "has been updated" : "failed to update");
                             });
                         }
                         else
@@ -103,7 +104,7 @@ namespace Armoury
                                 $"Armoury v {version}", "by SteveOhByte", "is out of date");
                         }
                     });
-                }
+                }*/
                 
                 loadoutHandler = new LoadoutHandler();
                 

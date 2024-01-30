@@ -42,6 +42,7 @@
         <Reference Include="LSPD First Response">
           <HintPath>..\References\LSPD First Response.dll</HintPath>
         </Reference>
+        <Reference Include="Microsoft.CSharp" />
         <Reference Include="OhPluginEssentials">
           <HintPath>..\..\OhPluginEssentials\bin\Debug\OhPluginEssentials.dll</HintPath>
         </Reference>
