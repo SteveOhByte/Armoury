@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using LemonUI;
@@ -191,8 +192,16 @@ namespace Armoury
             Vehicle[] nearbyVehicles = Game.LocalPlayer.Character.GetNearbyVehicles(1);
             Vehicle vehicle = nearbyVehicles.Length > 0 ? nearbyVehicles[0] : null;
 
-            return Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (vehicle != null && vehicle.IsPoliceVehicle &&
+            if (vehicle == null) return false;
+            
+            bool inOrBehindPoliceVehicle = Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (vehicle != null && vehicle.IsPoliceVehicle &&
                    !(vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) > 2f));
+            
+            bool nearFrontDoor = (from door in vehicle.GetDoors() let left = vehicle.LeftPosition let right = vehicle.RightPosition 
+                where (door.Index == 0 && left.DistanceTo(Game.LocalPlayer.Character) < 2f) || (door.Index == 1 && right.DistanceTo(Game.LocalPlayer.Character) < 2f) 
+                select door).Any(door => door.IsOpen);
+            
+            return inOrBehindPoliceVehicle || nearFrontDoor;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Rage;
 
 namespace Armoury
@@ -27,7 +28,22 @@ namespace Armoury
             
             Vehicle vehicle = Game.LocalPlayer.Character.GetNearbyVehicles(1)[0];
 
-            if (vehicle == null || !vehicle.IsPoliceVehicle || vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) > 2f) return;
+            if (vehicle != null && vehicle.IsPoliceVehicle)
+            {
+                bool isPlayerNearTrunk = vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
+                
+                bool isPlayerNearDoor = (from door in vehicle.GetDoors() let left = vehicle.LeftPosition let right = vehicle.RightPosition 
+                    where (door.Index == 0 && left.DistanceTo(Game.LocalPlayer.Character) < 2f) || (door.Index == 1 && right.DistanceTo(Game.LocalPlayer.Character) < 2f) 
+                    select door).Any(door => door.IsOpen);
+
+                if (isPlayerNearDoor)
+                {
+                    RunLoadout();
+                    return;
+                }
+                
+                if (!isPlayerNearTrunk) return;
+            }
 
             Vector3 pos = vehicle.RearPosition;
             Game.LocalPlayer.Character.Position = pos;
@@ -69,7 +85,11 @@ namespace Armoury
             }
             
             if (armour) Game.LocalPlayer.Character.Armor = MaxArmour;
-            if (medkit) Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;
+            if (medkit)
+            {
+                Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;
+                Game.LocalPlayer.Character.ClearBlood();
+            }
             
             if (rifleEquipped) GetRifle();
             if (shotgunEquipped) GetShotgun();
