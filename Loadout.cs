@@ -12,11 +12,13 @@ namespace Armoury
         public bool medkit;
         public Weapon rifle = null;
         public Weapon shotgun = null;
+        public Weapon fireExtinguisher = null;
 
         private const int MaxArmour = 100;
         
         private bool rifleEquipped = false;
         private bool shotgunEquipped = false;
+        private bool fireExtinguisherEquipped = false;
 
         public void Activate()
         {
@@ -46,6 +48,8 @@ namespace Armoury
             }
 
             Vector3 pos = vehicle.RearPosition;
+            // add an offset to the position so the player doesn't get stuck in the trunk, offset must be based on the vehicle's direction
+            pos += vehicle.ForwardVector * -0.5f;
             Game.LocalPlayer.Character.Position = pos;
             Game.LocalPlayer.Character.Face(vehicle);
             Game.LocalPlayer.HasControl = false;
@@ -53,10 +57,16 @@ namespace Armoury
             
             GameFiber.StartNew(delegate
             {
-                vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Open(true, true);
+                Game.LocalPlayer.Character.Tasks.PlayAnimation((AnimationDictionary) "rcmnigel3_trunk", "out_trunk_trevor", 2.5f, AnimationFlags.None);
+                GameFiber.Sleep(1000);
+                vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Open(true, false);
+                GameFiber.Sleep(2000);
                 Game.LocalPlayer.Character.Tasks.PlayAnimation("anim@gangops@morgue@table@", "player_search", 1f, AnimationFlags.None);
-                GameFiber.Sleep(4000);
+                GameFiber.Sleep(3000);
+                Game.LocalPlayer.Character.Tasks.PlayAnimation((AnimationDictionary) "rcmepsilonism8", "bag_handler_close_trunk_walk_left", 1f, AnimationFlags.None);
+                GameFiber.Sleep(2000);
                 vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Close(false);
+                GameFiber.Sleep(2500);
                 Game.LocalPlayer.HasControl = true;
                 vehicle.CollisionIgnoredEntity = null;
                 RunLoadout();
@@ -93,6 +103,7 @@ namespace Armoury
             
             if (rifleEquipped) GetRifle();
             if (shotgunEquipped) GetShotgun();
+            if (fireExtinguisherEquipped) GetFireExtinguisher();
         }
 
         public void GetRifle()
@@ -187,6 +198,38 @@ namespace Armoury
             Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
             
             shotgunEquipped = false;
+        }
+        
+        public void GetFireExtinguisher()
+        {
+            if (fireExtinguisher == null) return;
+            
+            WeaponAsset asset = fireExtinguisher.asset;
+            if (!asset.IsValid)
+            {
+                Main.Logger.Error($"Invalid weapon hash \"{fireExtinguisher.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, fireExtinguisher.ammo, true);
+            
+            fireExtinguisherEquipped = true;
+        }
+        
+        public void StoreFireExtinguisher()
+        {
+            if (fireExtinguisher == null) return;
+            
+            WeaponAsset asset = fireExtinguisher.asset;
+            if (!asset.IsValid)
+            {
+                Main.Logger.Error($"Invalid weapon hash \"{fireExtinguisher.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
+            
+            fireExtinguisherEquipped = false;
         }
     }
 }

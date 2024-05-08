@@ -5,7 +5,6 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armo
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\LiteConfig.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\LSPD First Response.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\OhPluginEssentials.dll
-C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHook.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.WinMM.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.Extras.dll
@@ -15,7 +14,6 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armo
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.Wasapi.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\LemonUI.RagePluginHook.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\LSPD First Response.pdb
-C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHook.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.WinMM.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.Extras.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.xml
@@ -27,3 +25,5 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armo
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.CopyComplete
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.pdb
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.xml

@@ -41,11 +41,15 @@ namespace Armoury
                 List<Weapon> weapons = new List<Weapon>();
                 bool armour = false;
                 bool medkit = false;
+                bool fireExtinguisherBoolean = false;
                 Weapon rifle = null;
                 Weapon shotgun = null;
+                Weapon fireExtinguisher = null;
                 
                 foreach (string hash in hashes)
                 {
+                    if (hash == "weapon_fireextinguisher") continue;
+                    
                     WeaponAsset asset = new WeaponAsset(hash);
                     if (!asset.IsValid)
                     {
@@ -92,6 +96,15 @@ namespace Armoury
                         // ignored
                     }
 
+                    try
+                    {
+                        fireExtinguisherBoolean = LC.ReadBool(file, "Fire Extinguisher");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+
                     string rifleString = string.Empty;
                     try
                     {
@@ -127,8 +140,11 @@ namespace Armoury
 
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 string name = string.Concat(fileName.Where(c => !char.IsWhiteSpace(c) && !char.IsNumber(c)));
+
+                if (fireExtinguisherBoolean)
+                    fireExtinguisher = new Weapon("weapon_fireextinguisher", new WeaponAsset("weapon_fireextinguisher"), -1, new List<string>());
                 
-                loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun });
+                loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun, fireExtinguisher = fireExtinguisher });
             }
 
             if (Main.defaultLoadout != string.Empty)

@@ -40,14 +40,14 @@
           <HintPath>packages\LiteConfig.1.0.2\lib\netstandard2.0\LiteConfig.dll</HintPath>
         </Reference>
         <Reference Include="LSPD First Response">
-          <HintPath>..\References\LSPD First Response.dll</HintPath>
+          <HintPath>S:\SteamLibrary\steamapps\common\Grand Theft Auto V\plugins\LSPD First Response.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="OhPluginEssentials">
           <HintPath>..\..\OhPluginEssentials\bin\Debug\OhPluginEssentials.dll</HintPath>
         </Reference>
-        <Reference Include="RagePluginHook, Version=0.0.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>packages\RagePluginHook.1.98.0\lib\net472\RagePluginHook.dll</HintPath>
+        <Reference Include="RagePluginHook">
+          <HintPath>..\References\RagePluginHookSDK.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>

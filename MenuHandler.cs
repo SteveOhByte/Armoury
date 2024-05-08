@@ -13,9 +13,9 @@ namespace Armoury
     {
         private ObjectPool pool;
         private NativeMenu menu;
-        private List<NativeItem> loadouts;
+        private NativeListItem<string> loadout;
         private NativeItem replenishItem;
-        private NativeItem rifleToggle, shotgunToggle;
+        private NativeItem rifleToggle, shotgunToggle, fireExtinguisherToggle;
         private NativeItem reloadItem;
         private bool menuEnabled = false;
         private bool onDuty = false;
@@ -36,6 +36,48 @@ namespace Armoury
 
                     if (IsMenuToggleRequested()) menuEnabled = !menuEnabled;
                     if (Game.IsKeyDown(Keys.Back)) menuEnabled = false;
+                    
+                    if (IsRifleHotkeyPressed() && ProximityCheck())
+                    {
+                        if (LoadoutHandler.Instance.activeLoadout.rifle == null) continue;
+                        
+                        if (rifleToggle.Title.StartsWith("Get"))
+                        {
+                            LoadoutHandler.Instance.activeLoadout.GetRifle();
+                            rifleToggle.Title = "Store Rifle";
+                            menuEnabled = false;
+                        }
+                        else
+                        {
+                            LoadoutHandler.Instance.activeLoadout.StoreRifle();
+                            rifleToggle.Title = "Get Rifle";
+                            menuEnabled = false;
+                        }
+                    }
+                    
+                    if (IsShotgunHotkeyPressed() && ProximityCheck())
+                    {
+                        if (LoadoutHandler.Instance.activeLoadout.shotgun == null) continue;
+                        
+                        if (shotgunToggle.Title.StartsWith("Get"))
+                        {
+                            LoadoutHandler.Instance.activeLoadout.GetShotgun();
+                            shotgunToggle.Title = "Store Shotgun";
+                            menuEnabled = false;
+                        }
+                        else
+                        {
+                            LoadoutHandler.Instance.activeLoadout.StoreShotgun();
+                            shotgunToggle.Title = "Get Shotgun";
+                            menuEnabled = false;
+                        }
+                    }
+                    
+                    if (IsRestockHotkeyPressed() && ProximityCheck())
+                    {
+                        LoadoutHandler.Instance.activeLoadout.Activate();
+                        menuEnabled = false;
+                    }
 
                     // Draw the menu
                     Draw();
@@ -52,13 +94,14 @@ namespace Armoury
             pool = new ObjectPool();
             menu = new NativeMenu("Armoury", "Loadouts");
             menu.Clear();
-            loadouts = new List<NativeItem>();
+            string[] loadoutTitles = new string[LoadoutHandler.Instance.loadouts.Count];
 
             for (int i = 0; i < LoadoutHandler.Instance.loadouts.Count; i++)
-                loadouts.Add(new NativeItem($"{i + 1}) {LoadoutHandler.Instance.loadouts[i].name}"));
+                loadoutTitles[i] = LoadoutHandler.Instance.loadouts[i].name;
+            
+            loadout = new NativeListItem<string>("Loadout", loadoutTitles);
 
-            foreach (NativeItem item in loadouts)
-                menu.Add(item);
+            menu.Add(loadout);
 
             reloadItem = new NativeItem("Reload Loadouts");
             replenishItem = new NativeItem("Restock Ammo, Armour, and Health");
@@ -74,6 +117,12 @@ namespace Armoury
             {
                 shotgunToggle = new NativeItem("Get Shotgun");
                 menu.Add(shotgunToggle);
+            }
+
+            if (LoadoutHandler.Instance.activeLoadout.fireExtinguisher != null)
+            {
+                fireExtinguisherToggle = new NativeItem("Get Fire Extinguisher");
+                menu.Add(fireExtinguisherToggle);
             }
             
             menu.Add(replenishItem);
@@ -120,24 +169,32 @@ namespace Armoury
                 shotgunToggle.Title = "Get Shotgun";
                 menuEnabled = false;
             }
+            else if (e.Item.Title.StartsWith("Get Fire Extinguisher")) // Gets Fire Extinguisher for Ped
+            {
+                LoadoutHandler.Instance.activeLoadout.GetFireExtinguisher();
+                fireExtinguisherToggle.Title = "Store Fire Extinguisher";
+                menuEnabled = false;
+            }
+            else if (e.Item.Title.StartsWith("Store Fire Extinguisher")) // Stores Fire Extinguisher for Ped
+            {
+                LoadoutHandler.Instance.activeLoadout.StoreFireExtinguisher();
+                fireExtinguisherToggle.Title = "Get Fire Extinguisher";
+                menuEnabled = false;
+            }
             else // Activates Loadout
             {
-                int i = int.Parse(Regex.Match(e.Item.Title, @"\d+").Value);
-
-                if (i > LoadoutHandler.Instance.loadouts.Count)
+                foreach (Loadout instanceLoadout in LoadoutHandler.Instance.loadouts
+                             .Where(instanceLoadout => instanceLoadout.name == loadout.SelectedItem && LoadoutHandler.Instance.loadouts.Count > 0))
                 {
-                    Main.Logger.Error($"Loadout {i} does not exist");
+                    LoadoutHandler.Instance.activeLoadout = LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)];
+                    LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)].Activate();
+                        
+                    menuEnabled = false;
+                    SetMenu();
                     return;
                 }
-
-                if (LoadoutHandler.Instance.loadouts.Count > 0)
-                {
-                    LoadoutHandler.Instance.activeLoadout = LoadoutHandler.Instance.loadouts[i - 1];
-                    LoadoutHandler.Instance.loadouts[i - 1].Activate();
-                }
-
-                menuEnabled = false;
-                SetMenu();
+                
+                Main.Logger.Error($"Loadout \"{loadout.SelectedItem}\" does not exist");
             }
         }
 
@@ -161,6 +218,51 @@ namespace Armoury
             }
         }
 
+        private bool IsRifleHotkeyPressed()
+        {
+            switch (Main.rifleHotkeyModifier)
+            {
+                case Keys.Shift:
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                case Keys.Control:
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                case Keys.Alt:
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                default:
+                    return Game.IsKeyDown(Main.rifleHotkey);
+            }
+        }
+        
+        private bool IsShotgunHotkeyPressed()
+        {
+            switch (Main.shotgunHotkeyModifier)
+            {
+                case Keys.Shift:
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                case Keys.Control:
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                case Keys.Alt:
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                default:
+                    return Game.IsKeyDown(Main.shotgunHotkey);
+            }
+        }
+        
+        private bool IsRestockHotkeyPressed()
+        {
+            switch (Main.restockHotkeyModifier)
+            {
+                case Keys.Shift:
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                case Keys.Control:
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                case Keys.Alt:
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                default:
+                    return Game.IsKeyDown(Main.restockHotkey);
+            }
+        }
+
         private bool ShouldTerminateLoop()
         {
             return !onDuty;
@@ -168,21 +270,26 @@ namespace Armoury
 
         private void Draw()
         {
-            replenishItem.Enabled = LoadoutHandler.Instance.activeLoadout != null;
-            menu.Visible = menuEnabled;
-            if (menuEnabled)
+            if (replenishItem != null)
             {
-                foreach (NativeItem item in menu.Items)
+                replenishItem.Enabled = LoadoutHandler.Instance.activeLoadout != null;
+                menu.Visible = menuEnabled;
+                if (menuEnabled)
                 {
-                    item.Draw();
+                    foreach (NativeItem item in menu.Items)
+                    {
+                        item.Draw();
+                    }
                 }
+
+                replenishItem.Enabled = ProximityCheck();
             }
 
-            replenishItem.Enabled = ProximityCheck();
-            rifleToggle.Enabled = ProximityCheck();
-            shotgunToggle.Enabled = ProximityCheck();
+            if (rifleToggle != null) rifleToggle.Enabled = ProximityCheck();
+            if (shotgunToggle != null) shotgunToggle.Enabled = ProximityCheck();
+            if (fireExtinguisherToggle != null) fireExtinguisherToggle.Enabled = ProximityCheck();
 
-            foreach (NativeItem item in loadouts) item.Enabled = ProximityCheck();
+            loadout.Enabled = ProximityCheck();
 
             pool.Process();
         }
