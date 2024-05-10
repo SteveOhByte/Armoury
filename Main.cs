@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Security;
 using System.Windows.Forms;
 using LiteConfig;
 using LSPD_First_Response.Mod.API;
+using Microsoft.Win32;
 using OhPluginEssentials;
 using Rage;
 
@@ -30,6 +33,10 @@ namespace Armoury
 
         private static MenuHandler menuHandler;
         private static LoadoutHandler loadoutHandler;
+
+        private Prompt associationPrompt;
+        private const float associationWaitTime = 15.0f;
+        private float associationWaitTimer = 0.0f;
         
         public override void Initialize()
         {
@@ -88,9 +95,92 @@ namespace Armoury
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
             
             Logger.Log($"Armoury v {version} has been initialized");
-            Logger.Log("Go on duty to start using Armoury");
+
+            if (LCNotAssociated())
+            {
+                // Allow association choice for 10 seconds, then exit the checking loop
+                associationPrompt = Prompt.DisplayPrompt("Press ~y~Y ~w~to connect .lc", "files to Notepad", TimeSpan.FromSeconds(associationWaitTime));
+                GameFiber.StartNew(AssociateFiles);
+            }
+        }
+        
+        private void AssociateFiles()
+        {
+            while (associationWaitTimer < associationWaitTime)
+            {
+                associationWaitTimer += Game.FrameTime;
+                GameFiber.Yield();
+                
+                if (Game.IsKeyDown(Keys.Y))
+                {
+                    try
+                    {
+                        CreateFileAssociation();
+                    }
+                    catch (SecurityException ex)
+                    {
+                        Logger.Log($"The plugin attempted to associate .lc files with Notepad, but was denied access: {ex.Message}");
+                    }
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        Logger.Log($"The plugin attempted to associate .lc files with Notepad, but was denied access: {ex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex.Message);
+                    }
+                    associationPrompt.Stop();
+                    break;
+                }
+            }
         }
 
+        private bool LCNotAssociated()
+        {
+            string extension = ".lc";
+            Dictionary<string, RegistryKey> registryBasePaths = new Dictionary<string, RegistryKey> {
+                { @"Software\Classes\" + extension, Registry.CurrentUser },
+                { @"Software\Classes\" + extension, Registry.LocalMachine },
+                { extension, Registry.ClassesRoot }
+            };
+
+            foreach (KeyValuePair<string, RegistryKey> item in registryBasePaths)
+            {
+                using (RegistryKey key = item.Value.OpenSubKey(item.Key))
+                {
+                    if (key != null)
+                    {
+                        return false;  // Association exists
+                    }
+                }
+            }
+
+            return true;  // No association found
+        }
+        
+        private void CreateFileAssociation()
+        {
+            string extension = ".lc";
+            string keyName = @"Software\Classes\" + extension;
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyName))
+            {
+                if (key != null)
+                {
+                    key.SetValue("", "LiteConfigFile");
+                    using (RegistryKey subKey = key.CreateSubKey(@"shell\open\command"))
+                    {
+                        subKey.SetValue("", "notepad.exe \"%1\"");
+                        Logger.Log($"{extension} files are now associated with Notepad.");
+                    }
+                }
+                else
+                {
+                    Logger.Log("Failed to create file association.");
+                }
+            }
+        }
+        
         private Keys ParseKey(string configString, int index)
         {
             string[] parts = LC.ReadString(config, configString).Split('+');

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 using System.Windows.Forms;
 using LemonUI;
 using LemonUI.Menus;
@@ -19,6 +17,7 @@ namespace Armoury
         private NativeItem reloadItem;
         private bool menuEnabled = false;
         private bool onDuty = false;
+        private int activeLoadoutIndex = 0;
 
         public void Start()
         {
@@ -34,7 +33,11 @@ namespace Armoury
                     
                     NativeFunction.Natives.DISABLE_PLAYER_VEHICLE_REWARDS(Game.LocalPlayer);
 
-                    if (IsMenuToggleRequested()) menuEnabled = !menuEnabled;
+                    if (IsMenuToggleRequested())
+                    {
+                        menuEnabled = !menuEnabled;
+                        if (menuEnabled) loadout.SelectedIndex = activeLoadoutIndex;
+                    }
                     if (Game.IsKeyDown(Keys.Back)) menuEnabled = false;
                     
                     if (IsRifleHotkeyPressed() && ProximityCheck())
@@ -92,7 +95,10 @@ namespace Armoury
             if (menu != null) menu.Visible = false;
             
             pool = new ObjectPool();
-            menu = new NativeMenu("Armoury", "Loadouts");
+            menu = new NativeMenu("Armoury", "Loadouts")
+            {
+                HeaderBehavior = HeaderBehavior.AlwaysHide
+            };
             menu.Clear();
             string[] loadoutTitles = new string[LoadoutHandler.Instance.loadouts.Count];
 
@@ -124,7 +130,6 @@ namespace Armoury
                 fireExtinguisherToggle = new NativeItem("Get Fire Extinguisher");
                 menu.Add(fireExtinguisherToggle);
             }
-            
             menu.Add(replenishItem);
             menu.UseMouse = false;
             menu.ItemActivated += MenuOnItemActivated;
@@ -188,7 +193,9 @@ namespace Armoury
                 {
                     LoadoutHandler.Instance.activeLoadout = LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)];
                     LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)].Activate();
-                        
+
+                    activeLoadoutIndex = loadout.SelectedIndex;
+                    
                     menuEnabled = false;
                     SetMenu();
                     return;
