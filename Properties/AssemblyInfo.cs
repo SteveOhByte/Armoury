@@ -31,5 +31,10 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.7")]
-[assembly: AssemblyFileVersion("1.0.7")]
+[assembly: AssemblyVersion("1.0.9")]
+[assembly: AssemblyFileVersion("1.0.9")]
+
+[assembly: AssemblyMetadata("UpdateBuddy-ModName", "Armoury")]
+[assembly: AssemblyMetadata("UpdateBuddy-UpdateUrl", "https://www.dl.dropboxusercontent.com/scl/fi/5yfgra636cwdx28nwrhcg/Update.zip?rlkey=stwh9jtz42yep9er965i8fow9&st=um7hm6p6&dl=0")]
+[assembly: AssemblyMetadata("UpdateBuddy-VersionUrl", "https://www.dl.dropboxusercontent.com/scl/fi/neze4glu5vt38ifvl09ep/version.txt?rlkey=rvvoc2qhg3v46flcpxqnbcoc3&st=o4vzf62i&dl=0")]
+[assembly: AssemblyMetadata("UpdateBuddy-Version", "1.0.9")]

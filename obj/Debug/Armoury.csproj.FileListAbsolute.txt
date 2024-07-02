@@ -22,8 +22,8 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armo
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.Wasapi.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.AssemblyReference.cache
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.CoreCompileInputs.cache
-C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.CopyComplete
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.pdb
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.Up2Date

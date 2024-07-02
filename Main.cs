@@ -19,6 +19,7 @@ namespace Armoury
         private static string config = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\Armoury\config.lc";
         public static string defaultLoadout = string.Empty;
         public static bool disableRWS = true;
+        public static bool heliEnabled = true;
         public static Keys menuKey = Keys.I;
         public static Keys menuModifier = Keys.Alt;
         public static Keys rifleHotkey = Keys.D1;
@@ -48,6 +49,7 @@ namespace Armoury
                 File.Create(config).Close();
                 LC.WriteValue(config, "Default Loadout", defaultLoadout);
                 LC.WriteValue(config, "Disable RWS", disableRWS);
+                LC.WriteValue(config, "Allow Armoury on Helicopters", heliEnabled);
                 LC.WriteValue(config, "Open Menu", menuKey);
                 LC.WriteValue(config, "Open Menu Modifier", menuModifier);
                 LC.WriteValue(config, "Rifle Hotkey", $"{rifleHotkeyModifier} + {rifleHotkey}");
@@ -58,6 +60,7 @@ namespace Armoury
             {
                 defaultLoadout = LC.ReadString(config, "Default Loadout");
                 disableRWS = LC.ReadBool(config, "Disable RWS");
+                heliEnabled = LC.ReadBool(config, "Allow Armoury on Helicopters");
                 menuKey = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu"), true);
                 menuModifier = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu Modifier"), true);
                 rifleHotkey = ParseKey("Rifle Hotkey", 1);

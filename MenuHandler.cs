@@ -308,7 +308,7 @@ namespace Armoury
 
             if (vehicle == null) return false;
             
-            bool inOrBehindPoliceVehicle = Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (vehicle != null && vehicle.IsPoliceVehicle &&
+            bool inOrBehindPoliceVehicle = (Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter)) || (vehicle != null && vehicle.IsPoliceVehicle &&
                    !(vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) > 2f));
             
             bool nearFrontDoor = (from door in vehicle.GetDoors() let left = vehicle.LeftPosition let right = vehicle.RightPosition 

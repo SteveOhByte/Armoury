@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rage;
 
@@ -22,7 +23,7 @@ namespace Armoury
 
         public void Activate()
         {
-            if (Game.LocalPlayer.Character.IsInAnyPoliceVehicle)
+            if (Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter))
             {
                 RunLoadout();
                 return;
@@ -30,7 +31,7 @@ namespace Armoury
             
             Vehicle vehicle = Game.LocalPlayer.Character.GetNearbyVehicles(1)[0];
 
-            if (vehicle != null && vehicle.IsPoliceVehicle)
+            if (vehicle != null && (vehicle.IsPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter)))
             {
                 bool isPlayerNearTrunk = vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
                 
@@ -59,7 +60,14 @@ namespace Armoury
             {
                 Game.LocalPlayer.Character.Tasks.PlayAnimation((AnimationDictionary) "rcmnigel3_trunk", "out_trunk_trevor", 2.5f, AnimationFlags.None);
                 GameFiber.Sleep(1000);
-                vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Open(true, false);
+                try
+                {
+                    vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Open(false, false);
+                }
+                catch (Exception e) // Rare case where index is out of bounds
+                {
+                    Main.Logger.Error($"Failed to open trunk door: {e}");
+                }
                 GameFiber.Sleep(2000);
                 Game.LocalPlayer.Character.Tasks.PlayAnimation("anim@gangops@morgue@table@", "player_search", 1f, AnimationFlags.None);
                 GameFiber.Sleep(3000);
