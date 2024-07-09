@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rage;
+using Rage.Native;
 
 namespace Armoury
 {
@@ -13,12 +14,14 @@ namespace Armoury
         public bool medkit;
         public Weapon rifle = null;
         public Weapon shotgun = null;
+        public Weapon lessLethal = null;
         public Weapon fireExtinguisher = null;
 
         private const int MaxArmour = 100;
         
         private bool rifleEquipped = false;
         private bool shotgunEquipped = false;
+        private bool lessLethalEquipped = false;
         private bool fireExtinguisherEquipped = false;
 
         public void Activate()
@@ -111,6 +114,7 @@ namespace Armoury
             
             if (rifleEquipped) GetRifle();
             if (shotgunEquipped) GetShotgun();
+            if (lessLethalEquipped) GetLessLethal();
             if (fireExtinguisherEquipped) GetFireExtinguisher();
         }
 
@@ -207,7 +211,62 @@ namespace Armoury
             
             shotgunEquipped = false;
         }
-        
+
+        public void GetLessLethal()
+        {
+            if (lessLethal == null) return;
+            
+            WeaponAsset asset = lessLethal.asset;
+            if (!asset.IsValid)
+            {
+                Main.Logger.Error($"Invalid weapon hash \"{lessLethal.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            if (lessLethal.ammo == -1)
+            {
+                Main.Logger.Error($"Invalid ammo value for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, lessLethal.ammo, true);
+            try
+            {
+                NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash, 12); // Index 12 = Orange Contrast
+            }
+            catch
+            {
+                Main.Logger.Error($"Failed to set tint index for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
+            }
+                
+            foreach (string component in lessLethal.components)
+                Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+            
+            lessLethalEquipped = true;
+        }
+
+        public void StoreLessLethal()
+        {
+            if (lessLethal == null) return;
+            
+            WeaponAsset asset = lessLethal.asset;
+            if (!asset.IsValid)
+            {
+                Main.Logger.Error($"Invalid weapon hash \"{lessLethal.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            if (lessLethal.ammo == -1)
+            {
+                Main.Logger.Error($"Invalid ammo value for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
+                return;
+            }
+
+            Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
+            
+            lessLethalEquipped = false;
+        }
+
         public void GetFireExtinguisher()
         {
             if (fireExtinguisher == null) return;

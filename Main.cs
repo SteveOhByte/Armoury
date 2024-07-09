@@ -22,10 +22,12 @@ namespace Armoury
         public static bool heliEnabled = true;
         public static Keys menuKey = Keys.I;
         public static Keys menuModifier = Keys.Alt;
-        public static Keys rifleHotkey = Keys.D1;
-        public static Keys rifleHotkeyModifier = Keys.Shift;
-        public static Keys shotgunHotkey = Keys.D2;
-        public static Keys shotgunHotkeyModifier = Keys.Shift;
+        public static Keys rifleHotkey = Keys.K;
+        public static Keys rifleHotkeyModifier = Keys.Alt;
+        public static Keys shotgunHotkey = Keys.L;
+        public static Keys shotgunHotkeyModifier = Keys.Alt;
+        public static Keys lessLethalHotkey = Keys.M;
+        public static Keys lessLethalHotkeyModifier = Keys.Alt;
         public static Keys restockHotkey = Keys.R;
         public static Keys restockHotkeyModifier = Keys.Shift;
 
@@ -54,6 +56,7 @@ namespace Armoury
                 LC.WriteValue(config, "Open Menu Modifier", menuModifier);
                 LC.WriteValue(config, "Rifle Hotkey", $"{rifleHotkeyModifier} + {rifleHotkey}");
                 LC.WriteValue(config, "Shotgun Hotkey", $"{shotgunHotkeyModifier} + {shotgunHotkey}");
+                LC.WriteValue(config, "Less Lethal Hotkey", $"{lessLethalHotkeyModifier} + {lessLethalHotkey}");
                 LC.WriteValue(config, "Restock Hotkey", $"{restockHotkeyModifier} + {restockHotkey}");
             }
             else
@@ -67,6 +70,8 @@ namespace Armoury
                 rifleHotkeyModifier = ParseKey("Rifle Hotkey", 0);
                 shotgunHotkey = ParseKey("Shotgun Hotkey", 1);
                 shotgunHotkeyModifier = ParseKey("Shotgun Hotkey", 0);
+                lessLethalHotkey = ParseKey("Less Lethal Hotkey", 1);
+                lessLethalHotkeyModifier = ParseKey("Less Lethal Hotkey", 0);
                 restockHotkey = ParseKey("Restock Hotkey", 1);
                 restockHotkeyModifier = ParseKey("Restock Hotkey", 0);
             }

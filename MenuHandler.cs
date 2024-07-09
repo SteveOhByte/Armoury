@@ -13,7 +13,7 @@ namespace Armoury
         private NativeMenu menu;
         private NativeListItem<string> loadout;
         private NativeItem replenishItem;
-        private NativeItem rifleToggle, shotgunToggle, fireExtinguisherToggle;
+        private NativeItem rifleToggle, shotgunToggle, lessLethalToggle, fireExtinguisherToggle;
         private NativeItem reloadItem;
         private bool menuEnabled = false;
         private bool onDuty = false;
@@ -76,6 +76,24 @@ namespace Armoury
                         }
                     }
                     
+                    if (IsLessLethalHotkeyPressed() && ProximityCheck())
+                    {
+                        if (LoadoutHandler.Instance.activeLoadout.lessLethal == null) continue;
+                        
+                        if (lessLethalToggle.Title.StartsWith("Get"))
+                        {
+                            LoadoutHandler.Instance.activeLoadout.GetLessLethal();
+                            lessLethalToggle.Title = "Store Less Lethal";
+                            menuEnabled = false;
+                        }
+                        else
+                        {
+                            LoadoutHandler.Instance.activeLoadout.StoreLessLethal();
+                            lessLethalToggle.Title = "Get Less Lethal";
+                            menuEnabled = false;
+                        }
+                    }
+                    
                     if (IsRestockHotkeyPressed() && ProximityCheck())
                     {
                         LoadoutHandler.Instance.activeLoadout.Activate();
@@ -123,6 +141,12 @@ namespace Armoury
             {
                 shotgunToggle = new NativeItem("Get Shotgun");
                 menu.Add(shotgunToggle);
+            }
+            
+            if (LoadoutHandler.Instance.activeLoadout.lessLethal != null)
+            {
+                lessLethalToggle = new NativeItem("Get Less Lethal");
+                menu.Add(lessLethalToggle);
             }
 
             if (LoadoutHandler.Instance.activeLoadout.fireExtinguisher != null)
@@ -172,6 +196,18 @@ namespace Armoury
             {
                 LoadoutHandler.Instance.activeLoadout.StoreShotgun();
                 shotgunToggle.Title = "Get Shotgun";
+                menuEnabled = false;
+            }
+            else if (e.Item.Title.StartsWith("Get Less Lethal")) // Gets Less Lethal for Ped
+            {
+                LoadoutHandler.Instance.activeLoadout.GetLessLethal();
+                lessLethalToggle.Title = "Store Less Lethal";
+                menuEnabled = false;
+            }
+            else if (e.Item.Title.StartsWith("Store Less Lethal")) // Stores Less Lethal for Ped
+            {
+                LoadoutHandler.Instance.activeLoadout.StoreLessLethal();
+                lessLethalToggle.Title = "Get Less Lethal";
                 menuEnabled = false;
             }
             else if (e.Item.Title.StartsWith("Get Fire Extinguisher")) // Gets Fire Extinguisher for Ped
@@ -252,6 +288,21 @@ namespace Armoury
                     return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
                 default:
                     return Game.IsKeyDown(Main.shotgunHotkey);
+            }
+        }
+
+        private bool IsLessLethalHotkeyPressed()
+        {
+            switch (Main.lessLethalHotkeyModifier)
+            {
+                case Keys.Shift:
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                case Keys.Control:
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                case Keys.Alt:
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                default:
+                    return Game.IsKeyDown(Main.lessLethalHotkey);
             }
         }
         
