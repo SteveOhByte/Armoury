@@ -40,61 +40,67 @@ namespace Armoury
                     }
                     if (Game.IsKeyDown(Keys.Back)) menuEnabled = false;
                     
-                    if (IsRifleHotkeyPressed() && ProximityCheck())
+                    if (IsRifleHotkeyPressed())
                     {
+                        (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
+                        if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
                         if (LoadoutHandler.Instance.activeLoadout.rifle == null) continue;
                         
                         if (rifleToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetRifle();
-                            rifleToggle.Title = "Store Rifle";
+                            LoadoutHandler.Instance.activeLoadout.GetRifle(result.IsBehindVehicle);
+                            rifleToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
                             menuEnabled = false;
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreRifle();
-                            rifleToggle.Title = "Get Rifle";
+                            LoadoutHandler.Instance.activeLoadout.StoreRifle(result.IsBehindVehicle);
+                            rifleToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
                             menuEnabled = false;
                         }
                     }
                     
-                    if (IsShotgunHotkeyPressed() && ProximityCheck())
+                    if (IsShotgunHotkeyPressed())
                     {
+                        (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
+                        if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
                         if (LoadoutHandler.Instance.activeLoadout.shotgun == null) continue;
                         
                         if (shotgunToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetShotgun();
-                            shotgunToggle.Title = "Store Shotgun";
+                            LoadoutHandler.Instance.activeLoadout.GetShotgun(result.IsBehindVehicle);
+                            shotgunToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
                             menuEnabled = false;
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreShotgun();
-                            shotgunToggle.Title = "Get Shotgun";
+                            LoadoutHandler.Instance.activeLoadout.StoreShotgun(result.IsBehindVehicle);
+                            shotgunToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
                             menuEnabled = false;
                         }
                     }
                     
-                    if (IsLessLethalHotkeyPressed() && ProximityCheck())
+                    if (IsLessLethalHotkeyPressed())
                     {
+                        (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
+                        if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
                         if (LoadoutHandler.Instance.activeLoadout.lessLethal == null) continue;
                         
                         if (lessLethalToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetLessLethal();
-                            lessLethalToggle.Title = "Store Less Lethal";
+                            LoadoutHandler.Instance.activeLoadout.GetLessLethal(result.IsBehindVehicle);
+                            lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
                             menuEnabled = false;
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreLessLethal();
-                            lessLethalToggle.Title = "Get Less Lethal";
+                            LoadoutHandler.Instance.activeLoadout.StoreLessLethal(result.IsBehindVehicle);
+                            lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
                             menuEnabled = false;
                         }
                     }
                     
-                    if (IsRestockHotkeyPressed() && ProximityCheck())
+                    if (IsRestockHotkeyPressed() && ProximityCheck(true))
                     {
                         LoadoutHandler.Instance.activeLoadout.Activate();
                         menuEnabled = false;
@@ -133,19 +139,19 @@ namespace Armoury
 
             if (LoadoutHandler.Instance.activeLoadout.rifle != null)
             {
-                rifleToggle = new NativeItem("Get Rifle");
+                rifleToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}");
                 menu.Add(rifleToggle);
             }
             
             if (LoadoutHandler.Instance.activeLoadout.shotgun != null)
             {
-                shotgunToggle = new NativeItem("Get Shotgun");
+                shotgunToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}");
                 menu.Add(shotgunToggle);
             }
             
             if (LoadoutHandler.Instance.activeLoadout.lessLethal != null)
             {
-                lessLethalToggle = new NativeItem("Get Less Lethal");
+                lessLethalToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}");
                 menu.Add(lessLethalToggle);
             }
 
@@ -163,6 +169,8 @@ namespace Armoury
 
         private void MenuOnItemActivated(object sender, ItemActivatedArgs e)
         {
+            (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
+            
             if (e.Item.Title.StartsWith("Reload")) // Reloads Loadouts from Files
             {
                 menuEnabled = false;
@@ -174,40 +182,40 @@ namespace Armoury
                 LoadoutHandler.Instance.activeLoadout.Activate();
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Get Rifle")) // Gets Rifle for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}")) // Gets Rifle for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetRifle();
-                rifleToggle.Title = "Store Rifle";
+                LoadoutHandler.Instance.activeLoadout.GetRifle(result.IsBehindVehicle);
+                rifleToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Store Rifle")) // Stores Rifle for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}")) // Stores Rifle for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreRifle();
-                rifleToggle.Title = "Get Rifle";
+                LoadoutHandler.Instance.activeLoadout.StoreRifle(result.IsBehindVehicle);
+                rifleToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Get Shotgun")) // Gets Shotgun for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}")) // Gets Shotgun for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetShotgun();
-                shotgunToggle.Title = "Store Shotgun";
+                LoadoutHandler.Instance.activeLoadout.GetShotgun(result.IsBehindVehicle);
+                shotgunToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Store Shotgun")) // Stores Shotgun for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}")) // Stores Shotgun for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreShotgun();
-                shotgunToggle.Title = "Get Shotgun";
+                LoadoutHandler.Instance.activeLoadout.StoreShotgun(result.IsBehindVehicle);
+                shotgunToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Get Less Lethal")) // Gets Less Lethal for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}")) // Gets Less Lethal for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetLessLethal();
-                lessLethalToggle.Title = "Store Less Lethal";
+                LoadoutHandler.Instance.activeLoadout.GetLessLethal(result.IsBehindVehicle);
+                lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith("Store Less Lethal")) // Stores Less Lethal for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}")) // Stores Less Lethal for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreLessLethal();
-                lessLethalToggle.Title = "Get Less Lethal";
+                LoadoutHandler.Instance.activeLoadout.StoreLessLethal(result.IsBehindVehicle);
+                lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
                 menuEnabled = false;
             }
             else if (e.Item.Title.StartsWith("Get Fire Extinguisher")) // Gets Fire Extinguisher for Ped
@@ -340,33 +348,56 @@ namespace Armoury
                     }
                 }
 
-                replenishItem.Enabled = ProximityCheck();
+                replenishItem.Enabled = ProximityCheck(true);
             }
 
-            if (rifleToggle != null) rifleToggle.Enabled = ProximityCheck();
-            if (shotgunToggle != null) shotgunToggle.Enabled = ProximityCheck();
-            if (fireExtinguisherToggle != null) fireExtinguisherToggle.Enabled = ProximityCheck();
+            if (rifleToggle != null) rifleToggle.Enabled = ProximityCheck(true);
+            if (shotgunToggle != null) shotgunToggle.Enabled = ProximityCheck(true);
+            if (lessLethalToggle != null) lessLethalToggle.Enabled = ProximityCheck(true);
+            if (fireExtinguisherToggle != null) fireExtinguisherToggle.Enabled = ProximityCheck(true);
 
-            loadout.Enabled = ProximityCheck();
+            loadout.Enabled = ProximityCheck(true);
 
             pool.Process();
         }
-        
-        private bool ProximityCheck()
-        {
-            Vehicle[] nearbyVehicles = Game.LocalPlayer.Character.GetNearbyVehicles(1);
-            Vehicle vehicle = nearbyVehicles.Length > 0 ? nearbyVehicles[0] : null;
 
-            if (vehicle == null) return false;
-            
-            bool inOrBehindPoliceVehicle = (Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter)) || (vehicle != null && vehicle.IsPoliceVehicle &&
-                   !(vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) > 2f));
-            
-            bool nearFrontDoor = (from door in vehicle.GetDoors() let left = vehicle.LeftPosition let right = vehicle.RightPosition 
-                where (door.Index == 0 && left.DistanceTo(Game.LocalPlayer.Character) < 2f) || (door.Index == 1 && right.DistanceTo(Game.LocalPlayer.Character) < 2f) 
-                select door).Any(door => door.IsOpen);
-            
-            return inOrBehindPoliceVehicle || nearFrontDoor;
+        private bool ProximityCheck(bool singleResult = true)
+        {
+            (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
+            return result.IsInVehicle || result.IsNearDoor || result.IsBehindVehicle;
+        }
+        
+        private (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) ProximityCheck()
+        {
+            // Initialize result tuple
+            (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = (IsInVehicle: false, IsNearDoor: false, IsBehindVehicle: false);
+
+            // Get the nearest vehicle within 1 unit distance
+            Vehicle nearestVehicle = Game.LocalPlayer.Character.GetNearbyVehicles(1).FirstOrDefault();
+
+            // If no nearby vehicle, return the default result
+            if (nearestVehicle == null) return result;
+
+            // Check if player is in a police vehicle or helicopter
+            result.IsInVehicle = Game.LocalPlayer.Character.IsInAnyPoliceVehicle || 
+                                 (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter);
+
+            // Check if player is behind a police vehicle
+            if (nearestVehicle.IsPoliceVehicle)
+            {
+                result.IsBehindVehicle = nearestVehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
+            }
+
+            // Check if player is near an open front door
+            result.IsNearDoor = nearestVehicle.GetDoors()
+                .Where(door => door.Index <= 1) // Only check front doors
+                .Any(door => 
+                    door.IsOpen && 
+                    (door.Index == 0 ? nearestVehicle.LeftPosition : nearestVehicle.RightPosition)
+                    .DistanceTo(Game.LocalPlayer.Character) < 2f
+                );
+
+            return result;
         }
     }
 }

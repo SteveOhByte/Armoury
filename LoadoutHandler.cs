@@ -46,6 +46,9 @@ namespace Armoury
                 Weapon shotgun = null;
                 Weapon lessLethal = null;
                 Weapon fireExtinguisher = null;
+                string rifleTitle = "Rifle";
+                string shotgunTitle = "Shotgun";
+                string lessLethalTitle = "Less Lethal";
                 
                 foreach (string hash in hashes)
                 {
@@ -135,6 +138,33 @@ namespace Armoury
                     {
                         // ignored
                     }
+
+                    try
+                    {
+                        lessLethalTitle = LC.ReadString(file, "Less Lethal Title");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                    
+                    try
+                    {
+                        shotgunTitle = LC.ReadString(file, "Shotgun Title");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                    
+                    try
+                    {
+                        rifleTitle = LC.ReadString(file, "Rifle Title");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                     
                     Weapon weapon = new Weapon(hash, asset, ammo, components);
                     if (string.Equals(weapon.name, rifleString, StringComparison.CurrentCultureIgnoreCase))
@@ -159,7 +189,7 @@ namespace Armoury
                 if (fireExtinguisherBoolean)
                     fireExtinguisher = new Weapon("weapon_fireextinguisher", new WeaponAsset("weapon_fireextinguisher"), -1, new List<string>());
                 
-                loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun, lessLethal = lessLethal, fireExtinguisher = fireExtinguisher });
+                loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun, lessLethal = lessLethal, rifleTitle = rifleTitle, shotgunTitle = shotgunTitle, lessLethalTitle = lessLethalTitle, fireExtinguisher = fireExtinguisher });
             }
 
             if (Main.defaultLoadout != string.Empty)
