@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Windows.Forms;
@@ -30,6 +31,7 @@ namespace Armoury
         public static Keys lessLethalHotkeyModifier = Keys.Alt;
         public static Keys restockHotkey = Keys.R;
         public static Keys restockHotkeyModifier = Keys.Shift;
+        public static List<string> allowedVehicles = new List<string>();
 
         private static readonly Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
         private static readonly string version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
@@ -58,6 +60,8 @@ namespace Armoury
                 LC.WriteValue(config, "Shotgun Hotkey", $"{shotgunHotkeyModifier} + {shotgunHotkey}");
                 LC.WriteValue(config, "Less Lethal Hotkey", $"{lessLethalHotkeyModifier} + {lessLethalHotkey}");
                 LC.WriteValue(config, "Restock Hotkey", $"{restockHotkeyModifier} + {restockHotkey}");
+                string allowedVehiclesString = string.Join(",", allowedVehicles);
+                LC.WriteValue(config, "Armoury-Enabled Vehicles", allowedVehiclesString);
             }
             else
             {
@@ -74,6 +78,9 @@ namespace Armoury
                 lessLethalHotkeyModifier = ParseKey("Less Lethal Hotkey", 0);
                 restockHotkey = ParseKey("Restock Hotkey", 1);
                 restockHotkeyModifier = ParseKey("Restock Hotkey", 0);
+                List<string> armouryEnabledVehicleStrings = LC.ReadList<string>(config, "Armoury-Enabled Vehicles");
+                foreach (string vehicle in armouryEnabledVehicleStrings.Where(vehicle => Model.VehicleModels.Contains(vehicle)))
+                    allowedVehicles.Add(vehicle);
             }
 
             if (disableRWS)

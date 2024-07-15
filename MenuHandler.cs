@@ -378,12 +378,15 @@ namespace Armoury
             // If no nearby vehicle, return the default result
             if (nearestVehicle == null) return result;
 
+            bool isInAddedVehicle = Main.allowedVehicles
+                .Any(vehicle => Game.LocalPlayer.Character.CurrentVehicle != null && Game.LocalPlayer.Character.CurrentVehicle.Model.Name == vehicle);
+
             // Check if player is in a police vehicle or helicopter
-            result.IsInVehicle = Game.LocalPlayer.Character.IsInAnyPoliceVehicle || 
+            result.IsInVehicle = isInAddedVehicle || Game.LocalPlayer.Character.IsInAnyPoliceVehicle || 
                                  (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter);
 
             // Check if player is behind a police vehicle
-            if (nearestVehicle.IsPoliceVehicle)
+            if (nearestVehicle.IsPoliceVehicle || (Main.allowedVehicles.Count > 0 && Main.allowedVehicles.Contains(nearestVehicle.Model.Name)))
             {
                 result.IsBehindVehicle = nearestVehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
             }

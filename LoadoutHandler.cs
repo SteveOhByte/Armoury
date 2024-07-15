@@ -61,7 +61,7 @@ namespace Armoury
                         continue;
                     }
 
-                    short ammo = -1;
+                    short ammo = 120;
                     try
                     {
                         ammo = LC.ReadValue<short>(file, $"{hash}_ammo");
