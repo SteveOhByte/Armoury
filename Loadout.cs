@@ -98,7 +98,6 @@ namespace Armoury
             pos += vehicle.ForwardVector * -0.5f;
             Game.LocalPlayer.Character.Position = pos;
             Game.LocalPlayer.Character.Face(vehicle);
-            Game.LocalPlayer.HasControl = false;
             vehicle.CollisionIgnoredEntity = Game.LocalPlayer.Character;
             
             GameFiber.StartNew(delegate
@@ -125,15 +124,14 @@ namespace Armoury
                         }
                     }
                 }
-                GameFiber.Sleep(2000);
-                Game.LocalPlayer.Character.Tasks.PlayAnimation("anim@gangops@morgue@table@", "player_search", 1f, AnimationFlags.None);
-                GameFiber.Sleep(3000);
-                action?.Invoke();
+                GameFiber.Sleep(1000);
                 Game.LocalPlayer.Character.Tasks.PlayAnimation((AnimationDictionary) "rcmepsilonism8", "bag_handler_close_trunk_walk_left", 1f, AnimationFlags.None);
-                GameFiber.Sleep(2000);
+                GameFiber.Sleep(1250);
+                action?.Invoke();
+                GameFiber.Sleep(800);
                 vehicle.GetDoors()[vehicle.GetDoors().Length - 1].Close(false);
-                GameFiber.Sleep(2500);
-                Game.LocalPlayer.HasControl = true;
+                GameFiber.Sleep(750);
+                Game.LocalPlayer.Character.Tasks.ClearImmediately();
                 vehicle.CollisionIgnoredEntity = null;
             });
         }

@@ -336,6 +336,8 @@ namespace Armoury
 
         private void Draw()
         {
+            bool proximity = false;
+            
             if (replenishItem != null)
             {
                 replenishItem.Enabled = LoadoutHandler.Instance.activeLoadout != null;
@@ -348,15 +350,18 @@ namespace Armoury
                     }
                 }
 
-                replenishItem.Enabled = ProximityCheck(true);
+                proximity = ProximityCheck(true);
+                replenishItem.Enabled = proximity;
             }
 
-            if (rifleToggle != null) rifleToggle.Enabled = ProximityCheck(true);
-            if (shotgunToggle != null) shotgunToggle.Enabled = ProximityCheck(true);
-            if (lessLethalToggle != null) lessLethalToggle.Enabled = ProximityCheck(true);
-            if (fireExtinguisherToggle != null) fireExtinguisherToggle.Enabled = ProximityCheck(true);
+            proximity = ProximityCheck(true);
+            
+            if (rifleToggle != null) rifleToggle.Enabled = proximity;
+            if (shotgunToggle != null) shotgunToggle.Enabled = proximity;
+            if (lessLethalToggle != null) lessLethalToggle.Enabled = proximity;
+            if (fireExtinguisherToggle != null) fireExtinguisherToggle.Enabled = proximity;
 
-            loadout.Enabled = ProximityCheck(true);
+            loadout.Enabled = proximity;
 
             pool.Process();
         }
