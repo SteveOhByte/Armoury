@@ -25,3 +25,17 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armo
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\RagePluginHookSDK.xml
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\obj\Debug\Armoury.csproj.Up2Date
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NAudio.Vorbis.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NVorbis.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Memory.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.ValueTuple.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Buffers.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\OhPluginEssentials.dll.config
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\NVorbis.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Memory.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.ValueTuple.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\Armoury\bin\Debug\System.Buffers.xml

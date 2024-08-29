@@ -81,6 +81,43 @@ namespace Armoury
                     {
                         // ignored
                     }
+                    
+                    string tint = string.Empty;
+                    try
+                    {
+                        tint = LC.ReadString(file, $"{hash}_tint");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                    int tintIndex = 0;
+                    if (!string.IsNullOrEmpty(tint))
+                    {
+                        // The user may have given a number, such as 21, 5, 3, etc
+                        // Or, they may have passed a name of some WeaponTint or Mk2WeaponTint enum such as GREEN, CLASSIC_WHITE, etc
+                        
+                        // First check if it's a number
+                        if (int.TryParse(tint, out int result))
+                        {
+                            tintIndex = result;
+                        }
+                        // If it's not a number, check if it's a WeaponTint or Mk2WeaponTint
+                        else if (Enum.TryParse(tint, out WeaponTint weaponTint))
+                        {
+                            tintIndex = (int)weaponTint;
+                        }
+                        else if (Enum.TryParse(tint, out Mk2WeaponTint mk2WeaponTint))
+                        {
+                            tintIndex = (int)mk2WeaponTint;
+                        }
+                        
+                        // If it's not a number or a valid enum, then it's invalid and we should ignore it
+                        if (tintIndex == 0)
+                        {
+                            continue;
+                        }
+                    }
 
                     try
                     {
@@ -166,7 +203,7 @@ namespace Armoury
                         // ignored
                     }
                     
-                    Weapon weapon = new Weapon(hash, asset, ammo, components);
+                    Weapon weapon = new Weapon(hash, asset, ammo, components, tintIndex);
                     if (string.Equals(weapon.name, rifleString, StringComparison.CurrentCultureIgnoreCase))
                     {
                         rifle = weapon;
@@ -187,7 +224,7 @@ namespace Armoury
                 string name = string.Concat(fileName.Where(c => !char.IsWhiteSpace(c) && !char.IsNumber(c)));
 
                 if (fireExtinguisherBoolean)
-                    fireExtinguisher = new Weapon("weapon_fireextinguisher", new WeaponAsset("weapon_fireextinguisher"), -1, new List<string>());
+                    fireExtinguisher = new Weapon("weapon_fireextinguisher", new WeaponAsset("weapon_fireextinguisher"), -1, new List<string>(), 0);
                 
                 loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun, lessLethal = lessLethal, rifleTitle = rifleTitle, shotgunTitle = shotgunTitle, lessLethalTitle = lessLethalTitle, fireExtinguisher = fireExtinguisher });
             }

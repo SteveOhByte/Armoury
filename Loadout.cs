@@ -74,6 +74,17 @@ namespace Armoury
 
                 Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, weapon.ammo, false);
                 
+                try // Set tint
+                {
+                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
+                        weapon.tintIndex);
+                }
+                catch
+                {
+                    Main.Logger.Error(
+                        $"Failed to set tint index for weapon \"{weapon.name}\" in loadout \"{name}\"");
+                }
+                
                 foreach (string component in weapon.components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
             }
@@ -157,6 +168,17 @@ namespace Armoury
             {
                 Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, rifle.ammo, true);
 
+                try // Set tint
+                {
+                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
+                        rifle.tintIndex);
+                }
+                catch
+                {
+                    Main.Logger.Error(
+                        $"Failed to set tint index for weapon \"{rifle.name}\" in loadout \"{name}\"");
+                }
+                
                 foreach (string component in rifle.components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
 
@@ -225,6 +247,17 @@ namespace Armoury
             {
                 Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, shotgun.ammo, true);
 
+                try // Set tint
+                {
+                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
+                        shotgun.tintIndex);
+                }
+                catch
+                {
+                    Main.Logger.Error(
+                        $"Failed to set tint index for weapon \"{shotgun.name}\" in loadout \"{name}\"");
+                }
+                
                 foreach (string component in shotgun.components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
 
@@ -293,17 +326,18 @@ namespace Armoury
             Action action = () =>
             {
                 Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, lessLethal.ammo, true);
-                try
+
+                try // Set tint
                 {
                     NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
-                        12); // Index 12 = Orange Contrast
+                        lessLethal.tintIndex);
                 }
                 catch
                 {
                     Main.Logger.Error(
                         $"Failed to set tint index for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
                 }
-
+                
                 foreach (string component in lessLethal.components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
 
