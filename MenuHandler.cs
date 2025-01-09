@@ -44,65 +44,65 @@ namespace Armoury
                     {
                         (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
                         if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
-                        if (LoadoutHandler.Instance.activeLoadout.rifle == null) continue;
+                        if (LoadoutHandler.Instance.ActiveLoadout.Rifle == null) continue;
                         
                         if (rifleToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetRifle(result.IsBehindVehicle);
-                            rifleToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.GetRifle(result.IsBehindVehicle);
+                            rifleToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}";
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreRifle(result.IsBehindVehicle);
-                            rifleToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.StoreRifle(result.IsBehindVehicle);
+                            rifleToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}";
                         }
+
+                        menuEnabled = false;
                     }
                     
                     if (IsShotgunHotkeyPressed())
                     {
                         (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
                         if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
-                        if (LoadoutHandler.Instance.activeLoadout.shotgun == null) continue;
+                        if (LoadoutHandler.Instance.ActiveLoadout.Shotgun == null) continue;
                         
                         if (shotgunToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetShotgun(result.IsBehindVehicle);
-                            shotgunToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.GetShotgun(result.IsBehindVehicle);
+                            shotgunToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}";
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreShotgun(result.IsBehindVehicle);
-                            shotgunToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.StoreShotgun(result.IsBehindVehicle);
+                            shotgunToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}";
                         }
+
+                        menuEnabled = false;
                     }
                     
                     if (IsLessLethalHotkeyPressed())
                     {
                         (bool IsInVehicle, bool IsNearDoor, bool IsBehindVehicle) result = ProximityCheck();
                         if (!result.IsBehindVehicle && !result.IsNearDoor && !result.IsInVehicle) continue;
-                        if (LoadoutHandler.Instance.activeLoadout.lessLethal == null) continue;
+                        if (LoadoutHandler.Instance.ActiveLoadout.LessLethal == null) continue;
                         
                         if (lessLethalToggle.Title.StartsWith("Get"))
                         {
-                            LoadoutHandler.Instance.activeLoadout.GetLessLethal(result.IsBehindVehicle);
-                            lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.GetLessLethal(result.IsBehindVehicle);
+                            lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}";
                         }
                         else
                         {
-                            LoadoutHandler.Instance.activeLoadout.StoreLessLethal(result.IsBehindVehicle);
-                            lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
-                            menuEnabled = false;
+                            LoadoutHandler.Instance.ActiveLoadout.StoreLessLethal(result.IsBehindVehicle);
+                            lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}";
                         }
+
+                        menuEnabled = false;
                     }
                     
                     if (IsRestockHotkeyPressed() && ProximityCheck(true))
                     {
-                        LoadoutHandler.Instance.activeLoadout.Activate();
+                        LoadoutHandler.Instance.ActiveLoadout.Activate();
                         menuEnabled = false;
                     }
 
@@ -124,10 +124,10 @@ namespace Armoury
                 HeaderBehavior = HeaderBehavior.AlwaysHide
             };
             menu.Clear();
-            string[] loadoutTitles = new string[LoadoutHandler.Instance.loadouts.Count];
+            string[] loadoutTitles = new string[LoadoutHandler.Instance.Loadouts.Count];
 
-            for (int i = 0; i < LoadoutHandler.Instance.loadouts.Count; i++)
-                loadoutTitles[i] = LoadoutHandler.Instance.loadouts[i].name;
+            for (int i = 0; i < LoadoutHandler.Instance.Loadouts.Count; i++)
+                loadoutTitles[i] = LoadoutHandler.Instance.Loadouts[i].Name;
             
             loadout = new NativeListItem<string>("Loadout", loadoutTitles);
 
@@ -137,25 +137,25 @@ namespace Armoury
             replenishItem = new NativeItem("Restock Ammo, Armour, and Health");
             menu.Add(reloadItem);
 
-            if (LoadoutHandler.Instance.activeLoadout.rifle != null)
+            if (LoadoutHandler.Instance.ActiveLoadout.Rifle != null)
             {
-                rifleToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}");
+                rifleToggle = new NativeItem($"Get {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}");
                 menu.Add(rifleToggle);
             }
             
-            if (LoadoutHandler.Instance.activeLoadout.shotgun != null)
+            if (LoadoutHandler.Instance.ActiveLoadout.Shotgun != null)
             {
-                shotgunToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}");
+                shotgunToggle = new NativeItem($"Get {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}");
                 menu.Add(shotgunToggle);
             }
             
-            if (LoadoutHandler.Instance.activeLoadout.lessLethal != null)
+            if (LoadoutHandler.Instance.ActiveLoadout.LessLethal != null)
             {
-                lessLethalToggle = new NativeItem($"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}");
+                lessLethalToggle = new NativeItem($"Get {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}");
                 menu.Add(lessLethalToggle);
             }
 
-            if (LoadoutHandler.Instance.activeLoadout.fireExtinguisher != null)
+            if (LoadoutHandler.Instance.ActiveLoadout.FireExtinguisher != null)
             {
                 fireExtinguisherToggle = new NativeItem("Get Fire Extinguisher");
                 menu.Add(fireExtinguisherToggle);
@@ -179,64 +179,64 @@ namespace Armoury
             }
             else if (e.Item.Title.StartsWith("Restock")) // Restocks Ammo, Armour, and Health
             {
-                LoadoutHandler.Instance.activeLoadout.Activate();
+                LoadoutHandler.Instance.ActiveLoadout.Activate();
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}")) // Gets Rifle for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}")) // Gets Rifle for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetRifle(result.IsBehindVehicle);
-                rifleToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.GetRifle(result.IsBehindVehicle);
+                rifleToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.rifleTitle}")) // Stores Rifle for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}")) // Stores Rifle for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreRifle(result.IsBehindVehicle);
-                rifleToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.rifleTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.StoreRifle(result.IsBehindVehicle);
+                rifleToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.RifleTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}")) // Gets Shotgun for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}")) // Gets Shotgun for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetShotgun(result.IsBehindVehicle);
-                shotgunToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.GetShotgun(result.IsBehindVehicle);
+                shotgunToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.shotgunTitle}")) // Stores Shotgun for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}")) // Stores Shotgun for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreShotgun(result.IsBehindVehicle);
-                shotgunToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.shotgunTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.StoreShotgun(result.IsBehindVehicle);
+                shotgunToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.ShotgunTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}")) // Gets Less Lethal for Ped
+            else if (e.Item.Title.StartsWith($"Get {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}")) // Gets Less Lethal for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetLessLethal(result.IsBehindVehicle);
-                lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.GetLessLethal(result.IsBehindVehicle);
+                lessLethalToggle.Title = $"Store {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}";
                 menuEnabled = false;
             }
-            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}")) // Stores Less Lethal for Ped
+            else if (e.Item.Title.StartsWith($"Store {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}")) // Stores Less Lethal for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreLessLethal(result.IsBehindVehicle);
-                lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.activeLoadout.lessLethalTitle}";
+                LoadoutHandler.Instance.ActiveLoadout.StoreLessLethal(result.IsBehindVehicle);
+                lessLethalToggle.Title = $"Get {LoadoutHandler.Instance.ActiveLoadout.LessLethalTitle}";
                 menuEnabled = false;
             }
             else if (e.Item.Title.StartsWith("Get Fire Extinguisher")) // Gets Fire Extinguisher for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.GetFireExtinguisher();
+                LoadoutHandler.Instance.ActiveLoadout.GetFireExtinguisher();
                 fireExtinguisherToggle.Title = "Store Fire Extinguisher";
                 menuEnabled = false;
             }
             else if (e.Item.Title.StartsWith("Store Fire Extinguisher")) // Stores Fire Extinguisher for Ped
             {
-                LoadoutHandler.Instance.activeLoadout.StoreFireExtinguisher();
+                LoadoutHandler.Instance.ActiveLoadout.StoreFireExtinguisher();
                 fireExtinguisherToggle.Title = "Get Fire Extinguisher";
                 menuEnabled = false;
             }
             else // Activates Loadout
             {
-                foreach (Loadout instanceLoadout in LoadoutHandler.Instance.loadouts
-                             .Where(instanceLoadout => instanceLoadout.name == loadout.SelectedItem && LoadoutHandler.Instance.loadouts.Count > 0))
+                foreach (Loadout instanceLoadout in LoadoutHandler.Instance.Loadouts
+                             .Where(instanceLoadout => instanceLoadout.Name == loadout.SelectedItem && LoadoutHandler.Instance.Loadouts.Count > 0))
                 {
-                    LoadoutHandler.Instance.activeLoadout = LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)];
-                    LoadoutHandler.Instance.loadouts[LoadoutHandler.Instance.loadouts.IndexOf(instanceLoadout)].Activate();
+                    LoadoutHandler.Instance.ActiveLoadout = LoadoutHandler.Instance.Loadouts[LoadoutHandler.Instance.Loadouts.IndexOf(instanceLoadout)];
+                    LoadoutHandler.Instance.Loadouts[LoadoutHandler.Instance.Loadouts.IndexOf(instanceLoadout)].Activate();
 
                     activeLoadoutIndex = loadout.SelectedIndex;
                     
@@ -256,76 +256,76 @@ namespace Armoury
 
         private bool IsMenuToggleRequested()
         {
-            switch (Main.menuModifier)
+            switch (Main.MenuModifier)
             {
                 case Keys.Shift:
-                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.menuKey);
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.MenuKey);
                 case Keys.Control:
-                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.menuKey);
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.MenuKey);
                 case Keys.Alt:
-                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.menuKey);
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.MenuKey);
                 default:
-                    return Game.IsKeyDown(Main.menuKey);
+                    return Game.IsKeyDown(Main.MenuKey);
             }
         }
 
         private bool IsRifleHotkeyPressed()
         {
-            switch (Main.rifleHotkeyModifier)
+            switch (Main.RifleHotkeyModifier)
             {
                 case Keys.Shift:
-                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.RifleHotkey);
                 case Keys.Control:
-                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.RifleHotkey);
                 case Keys.Alt:
-                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.rifleHotkey);
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.RifleHotkey);
                 default:
-                    return Game.IsKeyDown(Main.rifleHotkey);
+                    return Game.IsKeyDown(Main.RifleHotkey);
             }
         }
         
         private bool IsShotgunHotkeyPressed()
         {
-            switch (Main.shotgunHotkeyModifier)
+            switch (Main.ShotgunHotkeyModifier)
             {
                 case Keys.Shift:
-                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.ShotgunHotkey);
                 case Keys.Control:
-                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.ShotgunHotkey);
                 case Keys.Alt:
-                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.shotgunHotkey);
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.ShotgunHotkey);
                 default:
-                    return Game.IsKeyDown(Main.shotgunHotkey);
+                    return Game.IsKeyDown(Main.ShotgunHotkey);
             }
         }
 
         private bool IsLessLethalHotkeyPressed()
         {
-            switch (Main.lessLethalHotkeyModifier)
+            switch (Main.LessLethalHotkeyModifier)
             {
                 case Keys.Shift:
-                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.LessLethalHotkey);
                 case Keys.Control:
-                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.LessLethalHotkey);
                 case Keys.Alt:
-                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.lessLethalHotkey);
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.LessLethalHotkey);
                 default:
-                    return Game.IsKeyDown(Main.lessLethalHotkey);
+                    return Game.IsKeyDown(Main.LessLethalHotkey);
             }
         }
         
         private bool IsRestockHotkeyPressed()
         {
-            switch (Main.restockHotkeyModifier)
+            switch (Main.RestockHotkeyModifier)
             {
                 case Keys.Shift:
-                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                    return Game.IsShiftKeyDownRightNow && Game.IsKeyDown(Main.RestockHotkey);
                 case Keys.Control:
-                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                    return Game.IsControlKeyDownRightNow && Game.IsKeyDown(Main.RestockHotkey);
                 case Keys.Alt:
-                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.restockHotkey);
+                    return Game.IsAltKeyDownRightNow && Game.IsKeyDown(Main.RestockHotkey);
                 default:
-                    return Game.IsKeyDown(Main.restockHotkey);
+                    return Game.IsKeyDown(Main.RestockHotkey);
             }
         }
 
@@ -340,7 +340,7 @@ namespace Armoury
             
             if (replenishItem != null)
             {
-                replenishItem.Enabled = LoadoutHandler.Instance.activeLoadout != null;
+                replenishItem.Enabled = LoadoutHandler.Instance.ActiveLoadout != null;
                 menu.Visible = menuEnabled;
                 if (menuEnabled)
                 {
@@ -383,18 +383,16 @@ namespace Armoury
             // If no nearby vehicle, return the default result
             if (nearestVehicle == null) return result;
 
-            bool isInAddedVehicle = Main.allowedVehicles
+            bool isInAddedVehicle = Main.AllowedVehicles
                 .Any(vehicle => Game.LocalPlayer.Character.CurrentVehicle != null && Game.LocalPlayer.Character.CurrentVehicle.Model.Name == vehicle);
 
             // Check if player is in a police vehicle or helicopter
             result.IsInVehicle = isInAddedVehicle || Game.LocalPlayer.Character.IsInAnyPoliceVehicle || 
-                                 (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter);
+                                 (Main.HeliEnabled && Game.LocalPlayer.Character.IsInHelicopter);
 
             // Check if player is behind a police vehicle
-            if (nearestVehicle.IsPoliceVehicle || (Main.allowedVehicles.Count > 0 && Main.allowedVehicles.Contains(nearestVehicle.Model.Name)))
-            {
+            if (nearestVehicle.IsPoliceVehicle || (Main.AllowedVehicles.Count > 0 && Main.AllowedVehicles.Contains(nearestVehicle.Model.Name)))
                 result.IsBehindVehicle = nearestVehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
-            }
 
             // Check if player is near an open front door
             result.IsNearDoor = nearestVehicle.GetDoors()

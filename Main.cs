@@ -17,22 +17,22 @@ namespace Armoury
     public class Main : Plugin
     {
         public static Logger Logger;
-        private static string config = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\Armoury\config.lc";
-        public static string defaultLoadout = string.Empty;
-        public static bool disableRWS = true;
-        public static bool heliEnabled = true;
-        public static Keys menuKey = Keys.I;
-        public static Keys menuModifier = Keys.Alt;
-        public static Keys rifleHotkey = Keys.K;
-        public static Keys rifleHotkeyModifier = Keys.Alt;
-        public static Keys shotgunHotkey = Keys.L;
-        public static Keys shotgunHotkeyModifier = Keys.Alt;
-        public static Keys lessLethalHotkey = Keys.M;
-        public static Keys lessLethalHotkeyModifier = Keys.Alt;
-        public static Keys restockHotkey = Keys.R;
-        public static Keys restockHotkeyModifier = Keys.Shift;
-        public static List<string> allowedVehicles = new List<string>();
+        public static string DefaultLoadout = string.Empty;
+        public static bool DisableRWS = true;
+        public static bool HeliEnabled = true;
+        public static Keys MenuKey = Keys.I;
+        public static Keys MenuModifier = Keys.Alt;
+        public static Keys RifleHotkey = Keys.K;
+        public static Keys RifleHotkeyModifier = Keys.Alt;
+        public static Keys ShotgunHotkey = Keys.L;
+        public static Keys ShotgunHotkeyModifier = Keys.Alt;
+        public static Keys LessLethalHotkey = Keys.M;
+        public static Keys LessLethalHotkeyModifier = Keys.Alt;
+        public static Keys RestockHotkey = Keys.R;
+        public static Keys RestockHotkeyModifier = Keys.Shift;
+        public static readonly List<string> AllowedVehicles = new List<string>();
 
+        private static readonly string config = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\Armoury\config.lc";
         private static readonly Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
         private static readonly string version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
@@ -51,39 +51,39 @@ namespace Armoury
             if (!File.Exists(config))
             {
                 File.Create(config).Close();
-                LC.WriteValue(config, "Default Loadout", defaultLoadout);
-                LC.WriteValue(config, "Disable RWS", disableRWS);
-                LC.WriteValue(config, "Allow Armoury on Helicopters", heliEnabled);
-                LC.WriteValue(config, "Open Menu", menuKey);
-                LC.WriteValue(config, "Open Menu Modifier", menuModifier);
-                LC.WriteValue(config, "Rifle Hotkey", $"{rifleHotkeyModifier} + {rifleHotkey}");
-                LC.WriteValue(config, "Shotgun Hotkey", $"{shotgunHotkeyModifier} + {shotgunHotkey}");
-                LC.WriteValue(config, "Less Lethal Hotkey", $"{lessLethalHotkeyModifier} + {lessLethalHotkey}");
-                LC.WriteValue(config, "Restock Hotkey", $"{restockHotkeyModifier} + {restockHotkey}");
-                string allowedVehiclesString = string.Join(",", allowedVehicles);
+                LC.WriteValue(config, "Default Loadout", DefaultLoadout);
+                LC.WriteValue(config, "Disable RWS", DisableRWS);
+                LC.WriteValue(config, "Allow Armoury on Helicopters", HeliEnabled);
+                LC.WriteValue(config, "Open Menu", MenuKey);
+                LC.WriteValue(config, "Open Menu Modifier", MenuModifier);
+                LC.WriteValue(config, "Rifle Hotkey", $"{RifleHotkeyModifier} + {RifleHotkey}");
+                LC.WriteValue(config, "Shotgun Hotkey", $"{ShotgunHotkeyModifier} + {ShotgunHotkey}");
+                LC.WriteValue(config, "Less Lethal Hotkey", $"{LessLethalHotkeyModifier} + {LessLethalHotkey}");
+                LC.WriteValue(config, "Restock Hotkey", $"{RestockHotkeyModifier} + {RestockHotkey}");
+                string allowedVehiclesString = string.Join(",", AllowedVehicles);
                 LC.WriteValue(config, "Armoury-Enabled Vehicles", allowedVehiclesString);
             }
             else
             {
-                defaultLoadout = LC.ReadString(config, "Default Loadout");
-                disableRWS = LC.ReadBool(config, "Disable RWS");
-                heliEnabled = LC.ReadBool(config, "Allow Armoury on Helicopters");
-                menuKey = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu"), true);
-                menuModifier = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu Modifier"), true);
-                rifleHotkey = ParseKey("Rifle Hotkey", 1);
-                rifleHotkeyModifier = ParseKey("Rifle Hotkey", 0);
-                shotgunHotkey = ParseKey("Shotgun Hotkey", 1);
-                shotgunHotkeyModifier = ParseKey("Shotgun Hotkey", 0);
-                lessLethalHotkey = ParseKey("Less Lethal Hotkey", 1);
-                lessLethalHotkeyModifier = ParseKey("Less Lethal Hotkey", 0);
-                restockHotkey = ParseKey("Restock Hotkey", 1);
-                restockHotkeyModifier = ParseKey("Restock Hotkey", 0);
+                DefaultLoadout = LC.ReadString(config, "Default Loadout");
+                DisableRWS = LC.ReadBool(config, "Disable RWS");
+                HeliEnabled = LC.ReadBool(config, "Allow Armoury on Helicopters");
+                MenuKey = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu"), true);
+                MenuModifier = (Keys)Enum.Parse(typeof(Keys), LC.ReadString(config, "Open Menu Modifier"), true);
+                RifleHotkey = ParseKey("Rifle Hotkey", 1);
+                RifleHotkeyModifier = ParseKey("Rifle Hotkey", 0);
+                ShotgunHotkey = ParseKey("Shotgun Hotkey", 1);
+                ShotgunHotkeyModifier = ParseKey("Shotgun Hotkey", 0);
+                LessLethalHotkey = ParseKey("Less Lethal Hotkey", 1);
+                LessLethalHotkeyModifier = ParseKey("Less Lethal Hotkey", 0);
+                RestockHotkey = ParseKey("Restock Hotkey", 1);
+                RestockHotkeyModifier = ParseKey("Restock Hotkey", 0);
                 List<string> armouryEnabledVehicleStrings = LC.ReadList<string>(config, "Armoury-Enabled Vehicles");
                 foreach (string vehicle in armouryEnabledVehicleStrings.Where(vehicle => Model.VehicleModels.Contains(vehicle)))
-                    allowedVehicles.Add(vehicle);
+                    AllowedVehicles.Add(vehicle);
             }
 
-            if (disableRWS)
+            if (DisableRWS)
             {
                 string stpConfig = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\StopThePed.ini";
                 if (!File.Exists(stpConfig))
@@ -106,7 +106,6 @@ namespace Armoury
             
             Logger.Log("Armoury initialized at " + DateTime.Now);
             
-            // LSPDFR Boilerplate
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
             
             Logger.Log($"Armoury v {version} has been initialized");
@@ -152,16 +151,34 @@ namespace Armoury
 
         private bool LCNotAssociated()
         {
-            string extension = ".lc";
-            Dictionary<string, RegistryKey> registryBasePaths = new Dictionary<string, RegistryKey> {
-                { @"Software\Classes\" + extension, Registry.CurrentUser },
-                { @"Software\Classes\" + extension, Registry.LocalMachine },
-                { extension, Registry.ClassesRoot }
+            const string extension = ".lc";
+            // Use HashSet to avoid adding duplicate keys.
+            HashSet<string> registryBasePaths = new HashSet<string> {
+                @"Software\Classes\" + extension,
             };
 
-            foreach (KeyValuePair<string, RegistryKey> item in registryBasePaths)
+            foreach (string registryPath in registryBasePaths)
             {
-                using (RegistryKey key = item.Value.OpenSubKey(item.Key))
+                // Check Registry.CurrentUser
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
+                {
+                    if (key != null)
+                    {
+                        return false;  // Association exists
+                    }
+                }
+        
+                // Check Registry.LocalMachine
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (key != null)
+                    {
+                        return false;  // Association exists
+                    }
+                }
+
+                // Check Registry.ClassesRoot
+                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(registryPath))
                 {
                     if (key != null)
                     {

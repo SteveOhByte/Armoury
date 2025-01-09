@@ -53,19 +53,19 @@ namespace Armoury
 
     public class Weapon
     {
-        public string name;
-        public WeaponAsset asset;
-        public short ammo;
-        public List<string> components;
-        public int tintIndex = 0;
+        public readonly string Name;
+        public WeaponAsset Asset;
+        public readonly short Ammo;
+        public readonly List<string> Components;
+        public readonly int TintIndex = 0;
 
         public Weapon(string name, WeaponAsset asset, short ammo, List<string> components, int tintIndex)
         {
-            this.name = name;
-            this.asset = asset;
-            this.ammo = ammo;
-            this.components = components;
-            this.tintIndex = tintIndex;
+            Name = name;
+            Asset = asset;
+            Ammo = ammo;
+            Components = components;
+            TintIndex = tintIndex;
         }
     }
 }

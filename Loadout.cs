@@ -8,19 +8,19 @@ namespace Armoury
 {
     public class Loadout
     {
-        public string name;
-        public List<Weapon> weapons;
-        public bool armour;
-        public bool medkit;
-        public Weapon rifle = null;
-        public Weapon shotgun = null;
-        public Weapon lessLethal = null;
-        public Weapon fireExtinguisher = null;
-        public string rifleTitle = "Rifle";
-        public string shotgunTitle = "Shotgun";
-        public string lessLethalTitle = "Less Lethal";
+        public string Name;
+        public List<Weapon> Weapons;
+        public bool Armour;
+        public bool Medkit;
+        public Weapon Rifle = null;
+        public Weapon Shotgun = null;
+        public Weapon LessLethal = null;
+        public Weapon FireExtinguisher = null;
+        public string RifleTitle = "Rifle";
+        public string ShotgunTitle = "Shotgun";
+        public string LessLethalTitle = "Less Lethal";
 
-        private const int MaxArmour = 100;
+        private const int maxArmour = 100;
         
         private bool rifleEquipped = false;
         private bool shotgunEquipped = false;
@@ -29,7 +29,7 @@ namespace Armoury
 
         public void Activate()
         {
-            if (Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter))
+            if (Game.LocalPlayer.Character.IsInAnyPoliceVehicle || (Main.HeliEnabled && Game.LocalPlayer.Character.IsInHelicopter))
             {
                 RunLoadout();
                 return;
@@ -37,7 +37,7 @@ namespace Armoury
             
             Vehicle vehicle = Game.LocalPlayer.Character.GetNearbyVehicles(1)[0];
 
-            if (vehicle != null && (vehicle.IsPoliceVehicle || (Main.heliEnabled && Game.LocalPlayer.Character.IsInHelicopter)))
+            if (vehicle != null && (vehicle.IsPoliceVehicle || (Main.HeliEnabled && Game.LocalPlayer.Character.IsInHelicopter)))
             {
                 bool isPlayerNearTrunk = vehicle.RearPosition.DistanceTo(Game.LocalPlayer.Character) <= 2f;
                 
@@ -61,36 +61,36 @@ namespace Armoury
         {
             Game.LocalPlayer.Character.Inventory.Weapons.Clear();
             
-            foreach (Weapon weapon in weapons)
+            foreach (Weapon weapon in Weapons)
             {
-                WeaponAsset asset = weapon.asset;
+                WeaponAsset asset = weapon.Asset;
                 if (!asset.IsValid)
                 {
-                    Main.Logger.Error($"Invalid weapon hash \"{weapon.name}\" in loadout \"{name}\"");
+                    Main.Logger.Error($"Invalid weapon hash \"{weapon.Name}\" in loadout \"{Name}\"");
                     continue;
                 }
                 
-                if (weapon == rifle || weapon == shotgun || weapon == lessLethal) continue;
+                if (weapon == Rifle || weapon == Shotgun || weapon == LessLethal) continue;
 
-                Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, weapon.ammo, false);
+                Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, weapon.Ammo, false);
                 
                 try // Set tint
                 {
                     NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
-                        weapon.tintIndex);
+                        weapon.TintIndex);
                 }
                 catch
                 {
                     Main.Logger.Error(
-                        $"Failed to set tint index for weapon \"{weapon.name}\" in loadout \"{name}\"");
+                        $"Failed to set tint index for weapon \"{weapon.Name}\" in loadout \"{Name}\"");
                 }
                 
-                foreach (string component in weapon.components)
+                foreach (string component in weapon.Components)
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
             }
             
-            if (armour) Game.LocalPlayer.Character.Armor = MaxArmour;
-            if (medkit)
+            if (Armour) Game.LocalPlayer.Character.Armor = maxArmour;
+            if (Medkit)
             {
                 Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;
                 Game.LocalPlayer.Character.ClearBlood();
@@ -149,38 +149,24 @@ namespace Armoury
 
         public void GetRifle(bool fromTrunk)
         {
-            if (rifle == null) return;
+            if (Rifle == null) return;
             
-            WeaponAsset asset = rifle.asset;
+            WeaponAsset asset = Rifle.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{rifle.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{Rifle.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (rifle.ammo == -1)
+            if (Rifle.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{rifle.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{Rifle.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, rifle.ammo, true);
-
-                try // Set tint
-                {
-                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
-                        rifle.tintIndex);
-                }
-                catch
-                {
-                    Main.Logger.Error(
-                        $"Failed to set tint index for weapon \"{rifle.name}\" in loadout \"{name}\"");
-                }
-                
-                foreach (string component in rifle.components)
-                    Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+                GetWeapon(asset, Rifle);
 
                 rifleEquipped = true;
             };
@@ -190,34 +176,28 @@ namespace Armoury
             else
                 action.Invoke();
         }
-        
+
         public void StoreRifle(bool inTrunk)
         {
-            if (rifle == null) return;
+            if (Rifle == null) return;
             
-            WeaponAsset asset = rifle.asset;
+            WeaponAsset asset = Rifle.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{rifle.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{Rifle.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (rifle.ammo == -1)
+            if (Rifle.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{rifle.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{Rifle.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                foreach (WeaponDescriptor descriptor in Game.LocalPlayer.Character.Inventory.Weapons)
-                {
-                    if (descriptor.Asset == asset)
-                        descriptor.Ammo = 0;
-                }
-                Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
-
                 rifleEquipped = false;
+                RunLoadout();
             };
             
             if (inTrunk)
@@ -225,41 +205,27 @@ namespace Armoury
             else
                 action.Invoke();
         }
-        
+
         public void GetShotgun(bool fromTrunk)
         {
-            if (shotgun == null) return;
+            if (Shotgun == null) return;
             
-            WeaponAsset asset = shotgun.asset;
+            WeaponAsset asset = Shotgun.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{shotgun.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{Shotgun.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (shotgun.ammo == -1)
+            if (Shotgun.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{shotgun.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{Shotgun.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, shotgun.ammo, true);
-
-                try // Set tint
-                {
-                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
-                        shotgun.tintIndex);
-                }
-                catch
-                {
-                    Main.Logger.Error(
-                        $"Failed to set tint index for weapon \"{shotgun.name}\" in loadout \"{name}\"");
-                }
-                
-                foreach (string component in shotgun.components)
-                    Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+                GetWeapon(asset, Shotgun);
 
                 shotgunEquipped = true;
             };
@@ -272,32 +238,25 @@ namespace Armoury
         
         public void StoreShotgun(bool inTrunk)
         {
-            if (shotgun == null) return;
+            if (Shotgun == null) return;
             
-            WeaponAsset asset = shotgun.asset;
+            WeaponAsset asset = Shotgun.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{shotgun.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{Shotgun.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (shotgun.ammo == -1)
+            if (Shotgun.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{shotgun.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{Shotgun.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                foreach (WeaponDescriptor descriptor in Game.LocalPlayer.Character.Inventory.Weapons)
-                {
-                    if (descriptor.Asset == asset)
-                        descriptor.Ammo = 0;
-                }
-                
-                Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
-
                 shotgunEquipped = false;
+                RunLoadout();
             };
 
             if (inTrunk)
@@ -308,38 +267,24 @@ namespace Armoury
 
         public void GetLessLethal(bool fromTrunk)
         {
-            if (lessLethal == null) return;
+            if (LessLethal == null) return;
             
-            WeaponAsset asset = lessLethal.asset;
+            WeaponAsset asset = LessLethal.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{lessLethal.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{LessLethal.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (lessLethal.ammo == -1)
+            if (LessLethal.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{LessLethal.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, lessLethal.ammo, true);
-
-                try // Set tint
-                {
-                    NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, asset.Hash,
-                        lessLethal.tintIndex);
-                }
-                catch
-                {
-                    Main.Logger.Error(
-                        $"Failed to set tint index for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
-                }
-                
-                foreach (string component in lessLethal.components)
-                    Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
+                GetWeapon(asset, LessLethal);
 
                 lessLethalEquipped = true;
             };
@@ -352,32 +297,25 @@ namespace Armoury
 
         public void StoreLessLethal(bool inTrunk)
         {
-            if (lessLethal == null) return;
+            if (LessLethal == null) return;
             
-            WeaponAsset asset = lessLethal.asset;
+            WeaponAsset asset = LessLethal.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{lessLethal.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{LessLethal.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            if (lessLethal.ammo == -1)
+            if (LessLethal.Ammo == -1)
             {
-                Main.Logger.Error($"Invalid ammo value for weapon \"{lessLethal.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid ammo value for weapon \"{LessLethal.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Action action = () =>
             {
-                foreach (WeaponDescriptor descriptor in Game.LocalPlayer.Character.Inventory.Weapons)
-                {
-                    if (descriptor.Asset == asset)
-                        descriptor.Ammo = 0;
-                }
-                
-                Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
-
                 lessLethalEquipped = false;
+                RunLoadout();
             };
             
             if (inTrunk)
@@ -388,34 +326,53 @@ namespace Armoury
 
         public void GetFireExtinguisher()
         {
-            if (fireExtinguisher == null) return;
+            if (FireExtinguisher == null) return;
             
-            WeaponAsset asset = fireExtinguisher.asset;
+            WeaponAsset asset = FireExtinguisher.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{fireExtinguisher.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{FireExtinguisher.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
-            Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, fireExtinguisher.ammo, true);
+            Game.LocalPlayer.Character.Inventory.GiveNewWeapon(asset, FireExtinguisher.Ammo, true);
             
             fireExtinguisherEquipped = true;
         }
         
         public void StoreFireExtinguisher()
         {
-            if (fireExtinguisher == null) return;
+            if (FireExtinguisher == null) return;
             
-            WeaponAsset asset = fireExtinguisher.asset;
+            WeaponAsset asset = FireExtinguisher.Asset;
             if (!asset.IsValid)
             {
-                Main.Logger.Error($"Invalid weapon hash \"{fireExtinguisher.name}\" in loadout \"{name}\"");
+                Main.Logger.Error($"Invalid weapon hash \"{FireExtinguisher.Name}\" in loadout \"{Name}\"");
                 return;
             }
 
             Game.LocalPlayer.Character.Inventory.Weapons.Remove(asset);
             
             fireExtinguisherEquipped = false;
+        }
+        
+        private void GetWeapon(WeaponAsset weaponAsset, Weapon weapon)
+        {
+            Game.LocalPlayer.Character.Inventory.GiveNewWeapon(weaponAsset, weapon.Ammo, true);
+            
+            try // Set tint
+            {
+                NativeFunction.Natives.SET_PED_WEAPON_TINT_INDEX(Game.LocalPlayer.Character, weaponAsset.Hash,
+                    weapon.TintIndex);
+            }
+            catch
+            {
+                Main.Logger.Error(
+                    $"Failed to set tint index for weapon \"{weapon.Name}\" in loadout \"{Name}\"");
+            }
+                
+            foreach (string component in weapon.Components)
+                Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(weaponAsset, component);
         }
     }
 }

@@ -11,15 +11,15 @@ namespace Armoury
     {
         public static LoadoutHandler Instance => lazy.Value;
 
+        public readonly List<Loadout> Loadouts;
+        public Loadout ActiveLoadout;
+        
         private static readonly Lazy<LoadoutHandler> lazy = new Lazy<LoadoutHandler>(() => new LoadoutHandler());
-
-        public List<Loadout> loadouts;
-        public Loadout activeLoadout;
-        private string folderPath = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\Armoury\Loadouts";
+        private readonly string folderPath = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\Armoury\Loadouts";
 
         public LoadoutHandler()
         {
-            loadouts = new List<Loadout>();
+            Loadouts = new List<Loadout>();
 
             if (!Directory.Exists(folderPath))
             {
@@ -33,7 +33,7 @@ namespace Armoury
         public void LoadLoadouts()
         {
             Game.LocalPlayer.Character.Inventory.Weapons.Clear();
-            loadouts.Clear();
+            Loadouts.Clear();
             
             foreach (string file in Directory.GetFiles(folderPath).Where(path => path.EndsWith(".lc")))
             {
@@ -204,18 +204,12 @@ namespace Armoury
                     }
                     
                     Weapon weapon = new Weapon(hash, asset, ammo, components, tintIndex);
-                    if (string.Equals(weapon.name, rifleString, StringComparison.CurrentCultureIgnoreCase))
-                    {
+                    if (string.Equals(weapon.Name, rifleString, StringComparison.CurrentCultureIgnoreCase))
                         rifle = weapon;
-                    }
-                    else if (string.Equals(weapon.name, shotgunString, StringComparison.CurrentCultureIgnoreCase))
-                    {
+                    else if (string.Equals(weapon.Name, shotgunString, StringComparison.CurrentCultureIgnoreCase))
                         shotgun = weapon;
-                    }
-                    else if (string.Equals(weapon.name, lessLethalString, StringComparison.CurrentCultureIgnoreCase))
-                    {
+                    else if (string.Equals(weapon.Name, lessLethalString, StringComparison.CurrentCultureIgnoreCase))
                         lessLethal = weapon;
-                    }
                     
                     weapons.Add(weapon);
                 }
@@ -226,25 +220,22 @@ namespace Armoury
                 if (fireExtinguisherBoolean)
                     fireExtinguisher = new Weapon("weapon_fireextinguisher", new WeaponAsset("weapon_fireextinguisher"), -1, new List<string>(), 0);
                 
-                loadouts.Add(new Loadout { name = name, weapons = weapons, armour = armour, medkit = medkit, rifle = rifle, shotgun = shotgun, lessLethal = lessLethal, rifleTitle = rifleTitle, shotgunTitle = shotgunTitle, lessLethalTitle = lessLethalTitle, fireExtinguisher = fireExtinguisher });
+                Loadouts.Add(new Loadout { Name = name, Weapons = weapons, Armour = armour, Medkit = medkit, Rifle = rifle, Shotgun = shotgun, LessLethal = lessLethal, RifleTitle = rifleTitle, ShotgunTitle = shotgunTitle, LessLethalTitle = lessLethalTitle, FireExtinguisher = fireExtinguisher });
             }
 
-            if (Main.defaultLoadout != string.Empty)
+            if (Main.DefaultLoadout != string.Empty)
             {
-                Loadout defaultLoadout = loadouts.FirstOrDefault(l => l.name == Main.defaultLoadout);
+                Loadout defaultLoadout = Loadouts.FirstOrDefault(l => l.Name == Main.DefaultLoadout);
                 if (defaultLoadout != default)
                 {
-                    activeLoadout = defaultLoadout;
+                    ActiveLoadout = defaultLoadout;
                     return;
                 }
 
-                Main.Logger.Error($"Default loadout \"{Main.defaultLoadout}\" does not exist");
-                activeLoadout = loadouts[0];
+                Main.Logger.Error($"Default loadout \"{Main.DefaultLoadout}\" does not exist");
             }
-            else
-            {
-                activeLoadout = loadouts[0];
-            }
+
+            ActiveLoadout = Loadouts[0];
         }
     }
 }
