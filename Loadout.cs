@@ -10,7 +10,7 @@ namespace Armoury
     {
         public string Name;
         public List<Weapon> Weapons;
-        public bool Armour;
+        public int Armour;
         public bool Medkit;
         public Weapon Rifle = null;
         public Weapon Shotgun = null;
@@ -19,8 +19,6 @@ namespace Armoury
         public string RifleTitle = "Rifle";
         public string ShotgunTitle = "Shotgun";
         public string LessLethalTitle = "Less Lethal";
-
-        private const int maxArmour = 100;
         
         private bool rifleEquipped = false;
         private bool shotgunEquipped = false;
@@ -89,7 +87,8 @@ namespace Armoury
                     Game.LocalPlayer.Character.Inventory.AddComponentToWeapon(asset, component);
             }
             
-            if (Armour) Game.LocalPlayer.Character.Armor = maxArmour;
+            if (Armour != -1)
+                Game.LocalPlayer.Character.Armor = Armour;
             if (Medkit)
             {
                 Game.LocalPlayer.Character.Health = Game.LocalPlayer.Character.MaxHealth;

@@ -39,7 +39,7 @@ namespace Armoury
             {
                 List<string> hashes = LC.ReadList<string>(file, "Equipment");
                 List<Weapon> weapons = new List<Weapon>();
-                bool armour = false;
+                int armour = -1;
                 bool medkit = false;
                 bool fireExtinguisherBoolean = false;
                 Weapon rifle = null;
@@ -121,7 +121,18 @@ namespace Armoury
 
                     try
                     {
-                        armour = LC.ReadBool(file, "Armour");
+                        string armourString = LC.ReadString(file, "Armour"); 
+                        if (armourString.Equals("true", StringComparison.OrdinalIgnoreCase))
+                            armour = 100;
+                        else if (armourString.Equals("false", StringComparison.OrdinalIgnoreCase))
+                            armour = -1; // Ignored
+                        else // If not a boolean, it may be a number from 0 to 100
+                        {
+                            if (int.TryParse(armourString, out int result))
+                                armour = result;
+                            else
+                                armour = -1; // Ignored
+                        }
                     }
                     catch
                     {
